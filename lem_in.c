@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/26 12:17:10 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/28 15:25:52 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,6 +459,8 @@ int				link_rooms(t_list **head)
 			return (0);
 		}
 	}
+	printf("--------------------\n");
+	printf("address of room = %p\n", head);
 	print_rooms(*head);
 	return (1);
 }
@@ -511,6 +513,8 @@ t_list			*read_rooms(void)
 //			return (NULL);
 		}
 	}
+	printf("address of room = %p\n", &rooms);
+	print_rooms(rooms);
 	return (rooms);
 }
 
