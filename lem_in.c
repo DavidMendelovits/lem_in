@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/30 20:04:48 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/31 11:23:15 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,9 +212,9 @@ unsigned		read_first_line(void)
 void			print_room(t_room *room)
 {
 	WOW();
-	t_room		*tmp;
-	t_list		*adj;
+	t_adj		*adj;
 
+	printf("\n--------------------------------\n");
 	if (room && room->name)
 		printf("room -> %s\n", room->name);
 	if (room && room->significance)
@@ -235,8 +235,10 @@ void			print_room(t_room *room)
 		printf("adjacent to:\n");
 		while (adj)
 		{
-			tmp = (t_room *)adj->data;
-			printf("%s -> %s\n", room->name, tmp->name);
+			if (adj->direction)
+				printf("%s -> %s\n", room->name, adj->room->name);
+			else
+				printf("%s <- %s\n", room->name, adj->room->name);
 			adj = adj->next;
 		}
 	}
@@ -272,6 +274,25 @@ void			push(t_list **head, void *new_data, size_t size)
 	else
 	{
 		printf("pushed!\n");
+		new->next = *head;
+	}
+	*head = new;
+}
+
+void			push_adj(t_adj **head, t_room *room, int direction)
+{
+	WOW();
+	t_adj			*new;
+
+	new = malloc(sizeof(*new));
+	new->room = room;
+	new->direction = direction;
+	if (!(*head))
+	{
+		new->next = NULL;
+	}
+	else
+	{
 		new->next = *head;
 	}
 	*head = new;
@@ -413,9 +434,9 @@ void			link_(t_room **a, t_room **b)
 	t_room			*link;
 
 	link = *a;
-	push(&link->adjacent, *b, sizeof(*b));
+	push_adj(&link->adjacent, *b, 1);
 	link = *b;
-	push(&link->adjacent, *a, sizeof(*a));
+	push_adj(&link->adjacent, *a, 1);
 }
 
 int				link_room(t_list **head, char *link)
@@ -590,35 +611,146 @@ void			write_visited(t_room **room)
 	(*room)->visited = 1;
 }
 
+void			write_direction(t_adj **adj, char *name, int direction)
+{
+	WOW();
+	t_adj			*traverse;
+
+	traverse = *adj;
+	while (traverse)
+	{
+		if (!strcmp(traverse->room->name, name))
+		{
+			traverse->direction = direction;
+		}
+		traverse = traverse->next;
+	}
+}
+
+void			push_back(t_list **head, void *new_data, size_t size)
+{
+	WOW();
+	t_list			*new;
+	t_list			*traverse;
+
+	new = malloc(sizeof(*new));
+	new->data = new_data;
+	new->size = size;
+	new->next = NULL;
+	traverse = *head;
+	if (!(*head))
+	{
+		*head = new;
+		return ;
+	}
+	while (traverse)
+	{
+		if (traverse->next == NULL)
+		{
+			traverse->next = new;
+			return ;
+		}
+		traverse = traverse->next;
+	}
+}
+
+void			*pop(t_list **queue)
+{
+	void			*popped;
+	t_list			*short_;
+
+	popped = (*queue)->data;
+	short_ = (*queue)->next;
+	free(*queue);
+	*queue = short_;
+	return (popped);
+}
+
+void			print_room_name(t_room *room)
+{
+	printf("%s\n", room->name);
+}
+
+void			print_room_names(t_list *list)
+{
+	t_list			*traverse;
+
+	traverse = list;
+	while (traverse)
+	{
+		if (traverse->data)
+		{
+			print_room_name((t_room *)traverse->data);
+		}
+		traverse = traverse->next;
+	}
+}
+
+t_list			*list_dup(t_list *src)
+{
+	WOW();
+	t_list			*dup;
+
+	if (!src)
+	{
+		return (NULL);
+	}
+	dup = malloc(sizeof(*dup));
+	dup->data = malloc(src->size);
+	memcpy(dup->data, src->data, src->size);
+	dup->size = src->size;
+	dup->next = list_dup(src->next);
+	return (dup);
+}
+
+void			free_list(t_list *head)
+{
+	t_list			*tmp;
+
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp);
+	}
+}
+
 void			write_to_neighbors(t_room **room, unsigned distance)
 {
 	WOW();
-	t_list			*traverse;
+	t_adj			*traverse;
+	t_list			*queue;
+	t_list			*auxiliary_queue;
+	t_room			*tmp;
 
-	traverse = (*room)->adjacent;
-	if (!(*room)->visited)
-		(*room)->distance = distance;
-	(*room)->visited = 1;
-//	while (traverse)
-//	{
-//		if (traverse->data && !is_visited((t_room *)traverse->data))
-//		{
-//			write_distance((t_room **)&traverse->data, distance + 1);
-		//	write_visited((t_room **)&traverse->data);
-//		}
-//		traverse = traverse->next;
-//	}
-//	traverse = (*room)->adjacent;
-	while (traverse) 
+
+	print_room(*room);
+	queue = NULL;
+	auxiliary_queue = NULL;
+	push_back(&queue, *room, sizeof(**room));
+	int i = 5;
+	while (queue && i--)
 	{
-		printf("aboutta recurse!\n\n");
-		print_room(traverse->data);
-		if (traverse->data && !is_visited((t_room *)traverse->data))
+		auxiliary_queue = list_dup(queue);
+		free_list(queue);
+		queue = NULL;
+		print_room_names(auxiliary_queue);
+		while (auxiliary_queue)
 		{
-			printf("1\n--------\n");
-			write_to_neighbors((t_room **)&traverse->data, distance + 1);
+			tmp = (t_room *)pop(&auxiliary_queue);
+			traverse = tmp->adjacent;
+			while (traverse)
+			{
+				if (!traverse->room->visited)
+				{
+					traverse->room->distance = distance + 1;
+					traverse->room->visited = 1;
+					push_back(&queue, traverse->room, sizeof(*traverse->room));
+				}
+				traverse = traverse->next;
+			}
 		}
-		traverse = traverse->next;
+		distance += 1;
 	}
 }
 
@@ -633,10 +765,10 @@ void			bfs(t_list **head)
 		printf("error!\n");
 		return ;
 	}
+	write_visited(&end);
 	write_to_neighbors(&end, 0);
 	printf("-------------------(post)bfs--------------------\n");
 	print_rooms(*head);
-
 }
 
 void			lem_in(void)

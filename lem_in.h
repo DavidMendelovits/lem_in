@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/15 14:30:46 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/30 19:19:07 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/31 09:26:31 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+typedef struct		s_adj
+{
+	struct s_room	*room;
+	int 			direction:1; //1 for forward, 0 for blocked
+	struct s_adj	*next;
+}					t_adj;
+
 typedef struct		s_room
 {
 	char			*name;
@@ -47,7 +54,7 @@ typedef struct		s_room
 	unsigned		distance;
 	int				visited:1;
 	t_point			coordinates;
-	t_list			*adjacent;
+	t_adj			*adjacent;
 }					t_room;
 
 void			print_rooms(t_list *rooms);
