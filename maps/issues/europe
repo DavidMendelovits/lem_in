@@ -1,0 +1,217 @@
+1
+Albanie 0 1
+Allemagne 0 2
+Andorre 0 3
+Autriche 0 4
+Belgique 0 5
+Biélorussie 0 6
+Bosnie_Herzégovine 0 7
+Bulgarie 0 8
+##start
+Chypre 0 9
+Croatie 0 10
+Danemark 0 11
+Espagne 0 12
+Estonie 0 13
+Finlande 0 14
+France 0 15
+Grèce 0 16
+Hongrie 0 17
+Irlande 0 18
+##end
+Islande 0 19
+Italie 0 20
+_Lettonie 0 21
+_Liechtenstein 0 22
+_Lituanie 0 23
+_Luxembourg 0 24
+Macédoine 0 25
+Malte 0 26
+Moldavie 0 27
+Monaco 0 28
+Monténégro 0 29
+Norvège 0 30
+Pays_Bas 0 31
+Pologne 0 32
+Portugal 0 33
+République_Tchèque 0 34
+Roumanie 0 35
+Royaume_Uni 0 36
+Russie 0 37
+Serbie 0 38
+Slovaquie 0 39
+Slovénie 0 40
+Suède 0 41
+Suisse 0 42
+Ukraine 0 43
+Albanie-Monténégro
+Albanie-Serbie
+Albanie-Macédoine
+Albanie-Grèce
+Allemagne-France
+Allemagne-_Luxembourg
+Allemagne-Belgique
+Allemagne-Pays_Bas
+Allemagne-Suisse
+Allemagne-Autriche
+Allemagne-République_Tchèque
+Allemagne-Pologne
+Allemagne-Danemark
+Andorre-France
+Andorre-Espagne
+Autriche-Suisse
+Autriche-Allemagne
+Autriche-République_Tchèque
+Autriche-Slovaquie
+Autriche-Hongrie
+Autriche-Slovénie
+Autriche-Italie
+Autriche-_Liechtenstein
+Belgique-Pays_Bas
+Belgique-_Luxembourg
+Belgique-Allemagne
+Belgique-France
+Biélorussie-Russie
+Biélorussie-Ukraine
+Biélorussie-Pologne
+Biélorussie-_Lituanie
+Biélorussie-_Lettonie
+Bosnie_Herzégovine-Croatie
+Bosnie_Herzégovine-Serbie
+Bosnie_Herzégovine-Monténégro
+Bulgarie-Roumanie
+Bulgarie-Serbie
+Bulgarie-Macédoine
+Bulgarie-Grèce
+Chypre-Grèce
+Croatie-Slovénie
+Croatie-Hongrie
+Croatie-Serbie
+Croatie-Bosnie_Herzégovine
+Danemark-Allemagne
+Danemark-Suède
+Espagne-Andorre
+Espagne-France
+Espagne-Portugal
+Estonie-_Lettonie
+Estonie-Russie
+Estonie-Finlande
+Finlande-Estonie
+Finlande-Suède
+Finlande-Norvège
+Finlande-Russie
+France-Andorre
+France-Royaume_Uni
+France-Belgique
+France-_Luxembourg
+France-Allemagne
+France-Suisse
+France-Italie
+France-Espagne
+France-Monaco
+Grèce-Albanie
+Grèce-Chypre
+Grèce-Macédoine
+Grèce-Bulgarie
+Hongrie-Autriche
+Hongrie-Slovaquie
+Hongrie-Ukraine
+Hongrie-Roumanie
+Hongrie-Serbie
+Hongrie-Croatie
+Hongrie-Slovénie
+Irlande-Royaume_Uni
+Irlande-Islande
+Islande-Irlande
+Italie-France
+Italie-Suisse
+Italie-Autriche
+Italie-Slovénie
+Italie-Malte
+_Lettonie-Estonie
+_Lettonie-_Lituanie
+_Lettonie-Russie
+_Lettonie-Biélorussie
+_Liechtenstein-Suisse
+_Liechtenstein-Autriche
+_Lituanie-Russie
+_Lituanie-_Lettonie
+_Lituanie-Biélorussie
+_Lituanie-Pologne
+_Luxembourg-Allemagne
+_Luxembourg-France
+_Luxembourg-Belgique
+Macédoine-Albanie
+Macédoine-Serbie
+Macédoine-Bulgarie
+Macédoine-Grèce
+Malte-Italie
+Moldavie-Ukraine
+Moldavie-Roumanie
+Monaco-France
+Monténégro-Bosnie_Herzégovine
+Monténégro-Serbie
+Monténégro-Albanie
+Norvège-Danemark
+Norvège-Suède
+Norvège-Russie
+Pays_Bas-Belgique
+Pays_Bas-Allemagne
+Pologne-Allemagne
+Pologne-République_Tchèque
+Pologne-Slovaquie
+Pologne-Ukraine
+Pologne-Biélorussie
+Pologne-_Lituanie
+Pologne-Russie
+Portugal-Espagne
+République_Tchèque-Allemagne
+République_Tchèque-Pologne
+République_Tchèque-Slovaquie
+République_Tchèque-Autriche
+Roumanie-Ukraine
+Roumanie-Moldavie
+Roumanie-Bulgarie
+Roumanie-Serbie
+Roumanie-Hongrie
+Royaume_Uni-Irlande
+Royaume_Uni-France
+Russie-Finlande
+Russie-Estonie
+Russie-_Lettonie
+Russie-_Lituanie
+Russie-Pologne
+Russie-Biélorussie
+Russie-Ukraine
+Russie-Norvège
+Serbie-Hongrie
+Serbie-Roumanie
+Serbie-Bulgarie
+Serbie-Macédoine
+Serbie-Albanie
+Serbie-Monténégro
+Serbie-Bosnie_Herzégovine
+Serbie-Croatie
+Slovaquie-République_Tchèque
+Slovaquie-Pologne
+Slovaquie-Ukraine
+Slovaquie-Hongrie
+Slovaquie-Autriche
+Slovénie-Italie
+Slovénie-Autriche
+Slovénie-Hongrie
+Slovénie-Croatie
+Suède-Norvège
+Suède-Finlande
+Suède-Danemark
+Suisse-France
+Suisse-Italie
+Suisse-Autriche
+Suisse-_Liechtenstein
+Ukraine-Russie
+Ukraine-Biélorussie
+Ukraine-Pologne
+Ukraine-Slovaquie
+Ukraine-Hongrie
+Ukraine-Roumanie
+Ukraine-Moldavie

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/15 14:30:46 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/31 09:26:31 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/31 16:50:00 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct		s_room
 	unsigned		occupied;
 	unsigned		significance:2; // 1 for start, 2 for end
 	unsigned		distance;
-	int				visited:1;
+	unsigned		visited:1;
 	t_point			coordinates;
 	t_adj			*adjacent;
 }					t_room;

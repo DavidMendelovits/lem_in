@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/31 11:23:15 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/31 16:49:59 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,10 @@ void			print_room(t_room *room)
 	if (room && room->distance)
 	{
 		printf("%u away from end\n", room->distance);
+	}
+	if (room)
+	{
+		printf("visited flags = %d\n", room->visited);
 	}
 	if (room->adjacent)
 	{
@@ -606,9 +610,9 @@ int				is_visited(t_room *room)
 	return (0);
 }
 
-void			write_visited(t_room **room)
+void			write_visited(t_room **room, int flag)
 {
-	(*room)->visited = 1;
+	(*room)->visited = flag;
 }
 
 void			write_direction(t_adj **adj, char *name, int direction)
@@ -765,20 +769,77 @@ void			bfs(t_list **head)
 		printf("error!\n");
 		return ;
 	}
-	write_visited(&end);
+	write_visited(&end, 1);
 	write_to_neighbors(&end, 0);
 	printf("-------------------(post)bfs--------------------\n");
 	print_rooms(*head);
+}
+
+int				is_start(t_room *room)
+{
+	if (room->significance == 1)
+	{
+		return (1);
+	}
+	return (0);
+}
+
+t_room			*find_start(t_list **head)
+{
+	WOW();
+	t_list			*traverse;
+
+	traverse = *head;
+	while (traverse)
+	{
+		if (is_start((t_room *)traverse->data))
+		{
+			return ((t_room *)traverse->data);
+		}
+		traverse = traverse->next;
+	}
+	return (NULL);
+}
+
+void			set_visited_zero(t_list **head)
+{
+	t_list			*traverse;
+
+	traverse = *head;
+	while (traverse)
+	{
+		if (traverse->data)
+		{
+			write_visited((t_room **)&traverse->data, 0);
+		}
+		traverse = traverse->next;
+	}
+}
+
+t_list			*queue_paths(t_list *rooms)
+{
+	WOW();
+	t_list			*paths;
+	t_list			*path;
+	t_room			*start;
+
+	set_visited_zero(&rooms);
+	start = find_start(&rooms);
+	print_room(start);
+	return (paths);
 }
 
 void			lem_in(void)
 {
 	WOW();
 	t_list			*rooms;
+	t_list			*paths;
 
 	rooms = read_stdin();
 	print_rooms(rooms);
 	bfs(&rooms);
+	paths = queue_paths(rooms);
+	print_rooms(rooms);
 }
 
 int				main(void)
