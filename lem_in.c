@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/28 15:25:52 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/30 17:36:31 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ void			print_room(t_room *room)
 {
 	WOW();
 	t_room		*tmp;
+	t_list		*adj;
 
 	if (room && room->name)
 		printf("room -> %s\n", room->name);
@@ -226,12 +227,13 @@ void			print_room(t_room *room)
 	}
 	if (room->adjacent)
 	{
+		adj = room->adjacent;
 		printf("adjacent to:\n");
-		while (room->adjacent)
+		while (adj)
 		{
-			tmp = (t_room *)room->adjacent->data;
+			tmp = (t_room *)adj->data;
 			printf("%s -> %s\n", room->name, tmp->name);
-			room->adjacent = room->adjacent->next;
+			adj = adj->next;
 		}
 	}
 	printf("\n--------------------------------\n");
