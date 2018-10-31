@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/30 17:36:31 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/10/30 20:04:48 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,10 @@ void			print_room(t_room *room)
 	{
 		printf("located at [%d][%d]\n", room->coordinates.x, room->coordinates.y);
 	}
+	if (room && room->distance)
+	{
+		printf("%u away from end\n", room->distance);
+	}
 	if (room->adjacent)
 	{
 		adj = room->adjacent;
@@ -308,6 +312,8 @@ t_room			*new_room(char **args, unsigned sig)
 	new->coordinates.y = atoi(args[2]);
 	new->significance = sig;
 	new->adjacent = NULL;
+	new->distance = 0;
+	new->visited = 0;
 	if (sig == 1)
 		new->occupied = g_ants;
 	else
@@ -319,7 +325,7 @@ t_room			*new_room(char **args, unsigned sig)
 ** pushes room to queue. frees line.
 */
 
-int				parse_room(t_list **head, char **line, unsigned significance, int *phase_3)
+int				parse_room(t_list **head, char **line, unsigned significance, char **phase_3)
 {
 	WOW();
 	t_room			*new;
@@ -330,7 +336,7 @@ int				parse_room(t_list **head, char **line, unsigned significance, int *phase_
 	{
 		if (strchr(*line, '-'))
 		{
-			*phase_3 = 1;
+			*phase_3 = strdup(*line);
 			return (0);
 		}
 		else
@@ -437,12 +443,14 @@ int				link_room(t_list **head, char *link)
 	return (1);
 }
 
-int				link_rooms(t_list **head)
+int				link_rooms(t_list **head, char *link1)
 {
 	WOW();
 	char			*line;
 
 	print_rooms(*head);
+	if (!valid_link(link1) || !link_room(head, link1))
+		return (0);
 	while ((line = read_line()))
 	{
 		if (line[0] == '#')
@@ -473,9 +481,9 @@ t_list			*read_rooms(void)
 	t_list			*rooms;
 	char			*line;
 	unsigned		significance;
-	int				phase_3;
+	char			*phase_3;
 
-	phase_3 = 0;
+	phase_3 = NULL;
 	rooms = NULL;
 	while ((line = read_line()))
 	{
@@ -508,7 +516,7 @@ t_list			*read_rooms(void)
 	print_rooms(rooms);
 	if (phase_3)
 	{		
-		if (!link_rooms(&rooms))
+		if (!link_rooms(&rooms, phase_3))
 		{
 //			if (rooms)
 //				free_list(rooms);
@@ -533,12 +541,112 @@ t_list			*read_stdin(void)
 	return (rooms);
 }
 
+int				is_end(t_room *room)
+{
+	if (room->significance == 2)
+	{
+		return (1);
+	}
+	return (0);
+}
+
+t_room			*find_end(t_list **head)
+{
+	t_list			*traverse;
+
+	traverse = *head;
+	while (traverse)
+	{
+		if (is_end((t_room *)traverse->data))
+		{
+			return ((t_room *)traverse->data);
+		}
+		traverse = traverse->next;
+	}
+	return (NULL);
+}
+
+void			write_distance(t_room **room, unsigned d)
+{
+	(*room)->distance = d;
+}
+
+int				has_dist(t_room *room)
+{
+	if (room && room->distance != 0)
+		return (1);
+	return (0);
+}
+
+int				is_visited(t_room *room)
+{
+	if (room->visited)
+		return (1);
+	return (0);
+}
+
+void			write_visited(t_room **room)
+{
+	(*room)->visited = 1;
+}
+
+void			write_to_neighbors(t_room **room, unsigned distance)
+{
+	WOW();
+	t_list			*traverse;
+
+	traverse = (*room)->adjacent;
+	if (!(*room)->visited)
+		(*room)->distance = distance;
+	(*room)->visited = 1;
+//	while (traverse)
+//	{
+//		if (traverse->data && !is_visited((t_room *)traverse->data))
+//		{
+//			write_distance((t_room **)&traverse->data, distance + 1);
+		//	write_visited((t_room **)&traverse->data);
+//		}
+//		traverse = traverse->next;
+//	}
+//	traverse = (*room)->adjacent;
+	while (traverse) 
+	{
+		printf("aboutta recurse!\n\n");
+		print_room(traverse->data);
+		if (traverse->data && !is_visited((t_room *)traverse->data))
+		{
+			printf("1\n--------\n");
+			write_to_neighbors((t_room **)&traverse->data, distance + 1);
+		}
+		traverse = traverse->next;
+	}
+}
+
+void			bfs(t_list **head)
+{
+	WOW();
+	t_room			*end;
+
+	end = find_end(head);
+	if (!end)
+	{
+		printf("error!\n");
+		return ;
+	}
+	write_to_neighbors(&end, 0);
+	printf("-------------------(post)bfs--------------------\n");
+	print_rooms(*head);
+
+}
+
 void			lem_in(void)
 {
 	WOW();
 	t_list			*rooms;
 
 	rooms = read_stdin();
+	print_rooms(rooms);
+	bfs(&rooms);
 }
 
 int				main(void)
