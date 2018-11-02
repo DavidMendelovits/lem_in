@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/11/02 16:17:50 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/11/02 16:35:11 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -946,6 +946,49 @@ t_list			*queue_paths(t_list *rooms)
 	return (paths);
 }
 
+void			move_ant(t_list **path_, t_room *room)
+{
+	WOW();
+	t_list			*path;
+	t_room			*next;
+	t_room			*current;
+
+	path = *path_;
+	next = path->next->data;
+	if (next->occupied && !is_end(next))
+	{
+		move_ant(&path->next, next);
+	}
+	next->occupied += 1;
+	if (is_end(next))
+	{
+		next->occupied -= 1;
+		printf("ant has left the building!\n");
+	}
+	current = path->data;
+	current->occupied -= 1;
+	printf("moved ant from room %s to room %s\n", current->name, next->name);
+	if (!is_end(next))
+		move_ant(&path->next, next);
+}
+
+void			move_ants(t_list **paths)
+{
+	WOW();
+	t_list			*path;
+	t_list			*traverse;
+	t_room			*room;
+
+	traverse = *paths;
+	while (traverse)
+	{
+		path = traverse->data;
+		room = path->data;
+		move_ant(&path, room);
+		traverse = traverse->next;
+	}
+}
+
 void			lem_in(void)
 {
 	WOW();
@@ -956,7 +999,8 @@ void			lem_in(void)
 	print_rooms(rooms);
 	bfs(&rooms);
 	paths = queue_paths(rooms);
-//	print_rooms(rooms);
+	move_ants(&paths);
+	print_rooms(rooms);
 }
 
 int				main(void)
