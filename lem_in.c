@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/11/02 15:58:36 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/11/02 16:17:50 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -847,20 +847,21 @@ t_room			*lowest_hanging_fruit(t_room **room)
 	t_adj			*traverse;
 
 	traverse = (*room)->adjacent;
-	tmp = traverse->room;
-	print_room(tmp);
+	tmp = NULL;
 	while (traverse)
 	{
 		if (is_end(traverse->room))
 		{
 			return (traverse->room);
 		}
-		if (traverse->room->distance < tmp->distance)
+		if ((!tmp || traverse->room->distance < tmp->distance) && !traverse->room->visited)
 		{
 			tmp = traverse->room;
 		}
 		traverse = traverse->next;
 	}
+	tmp->visited = 1;
+	print_room(tmp);
 	return (tmp);
 }
 
@@ -878,6 +879,8 @@ int				push_new_path(t_list **paths_head, t_room *start)
 		traverse = lowest_hanging_fruit(&traverse);
 		push_back(&path, traverse, sizeof(traverse));
 	}
+	if (!traverse)
+		return (0);
 	push_back(paths_head, path, sizeof(path));
 	return (1);
 }
@@ -891,15 +894,33 @@ t_list			*find_paths(t_room *start, int max)
 
 	path = NULL;
 	paths = NULL;
-//	while (max--)
-//	{
-	
-		push_new_path(&paths, start);
-//	}
-	printf("---------------------printing shortest path---------------\n");
-	print_rooms((t_list *)paths->data);
+	while (max--)
+	{	
+		if (!push_new_path(&paths, start))
+			break ;
+	}
+//	printf("---------------------printing shortest path---------------\n");
+//	print_rooms((t_list *)paths->data);
 	return (paths);
 
+}
+
+void			print_paths(t_list *paths)
+{
+	WOW();
+	t_list			*traverse;
+	int				i = 0;
+	
+	traverse = paths;
+	while (traverse)
+	{
+		if (traverse->data)
+		{
+			printf("--------------------path %d -----------------------\n", i++);
+			print_rooms(traverse->data);
+		}
+		traverse = traverse->next;
+	}
 }
 
 t_list			*queue_paths(t_list *rooms)
@@ -920,6 +941,8 @@ t_list			*queue_paths(t_list *rooms)
 	max_paths = calculate_max_paths(start, end);
 	printf("max paths = %d\n", max_paths);
 	paths = find_paths(start, max_paths);
+	printf("---------------------printing shortest paths---------------\n");
+	print_paths(paths);
 	return (paths);
 }
 
