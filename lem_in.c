@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 09:26:53 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/10/31 16:49:59 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/11/02 15:58:36 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -732,8 +732,7 @@ void			write_to_neighbors(t_room **room, unsigned distance)
 	queue = NULL;
 	auxiliary_queue = NULL;
 	push_back(&queue, *room, sizeof(**room));
-	int i = 5;
-	while (queue && i--)
+	while (queue)
 	{
 		auxiliary_queue = list_dup(queue);
 		free_list(queue);
@@ -816,16 +815,111 @@ void			set_visited_zero(t_list **head)
 	}
 }
 
-t_list			*queue_paths(t_list *rooms)
+int				calculate_max_paths(t_room *start, t_room *end)
+{
+	WOW();
+	t_adj			*traverse;
+	int				in;
+	int				out;
+
+	in = 0;
+	out = 0;
+	traverse = start->adjacent;
+	while (traverse)
+	{
+		in += 1;
+		traverse = traverse->next;
+	}
+	traverse = end->adjacent;
+	while (traverse)
+	{
+		out += 1;
+		traverse = traverse->next;
+	}
+	printf("in = %d\nout = %d\n", in, out);
+	return (in < out ? in : out);
+}
+
+t_room			*lowest_hanging_fruit(t_room **room)
+{
+	WOW();
+	t_room			*tmp;
+	t_adj			*traverse;
+
+	traverse = (*room)->adjacent;
+	tmp = traverse->room;
+	print_room(tmp);
+	while (traverse)
+	{
+		if (is_end(traverse->room))
+		{
+			return (traverse->room);
+		}
+		if (traverse->room->distance < tmp->distance)
+		{
+			tmp = traverse->room;
+		}
+		traverse = traverse->next;
+	}
+	return (tmp);
+}
+
+int				push_new_path(t_list **paths_head, t_room *start)
+{
+	t_list			*path;
+	t_room			*traverse;
+
+	path = NULL;
+	push_back(&path, start, sizeof(start));
+	traverse = start;
+	while (traverse && !is_end(traverse))
+	{
+		print_room(traverse);
+		traverse = lowest_hanging_fruit(&traverse);
+		push_back(&path, traverse, sizeof(traverse));
+	}
+	push_back(paths_head, path, sizeof(path));
+	return (1);
+}
+
+t_list			*find_paths(t_room *start, int max)
 {
 	WOW();
 	t_list			*paths;
 	t_list			*path;
+	t_room			*traverse;
+
+	path = NULL;
+	paths = NULL;
+//	while (max--)
+//	{
+	
+		push_new_path(&paths, start);
+//	}
+	printf("---------------------printing shortest path---------------\n");
+	print_rooms((t_list *)paths->data);
+	return (paths);
+
+}
+
+t_list			*queue_paths(t_list *rooms)
+{
+	WOW();
+	t_list			*paths;
 	t_room			*start;
+	t_room			*end;
+	int				max_paths;
 
 	set_visited_zero(&rooms);
 	start = find_start(&rooms);
+	end = find_end(&rooms);
+	printf("--------------------------start---------------------------\n");
 	print_room(start);
+	printf("--------------------------end-----------------------------\n");
+	print_room(end);
+	max_paths = calculate_max_paths(start, end);
+	printf("max paths = %d\n", max_paths);
+	paths = find_paths(start, max_paths);
 	return (paths);
 }
 
@@ -839,7 +933,7 @@ void			lem_in(void)
 	print_rooms(rooms);
 	bfs(&rooms);
 	paths = queue_paths(rooms);
-	print_rooms(rooms);
+//	print_rooms(rooms);
 }
 
 int				main(void)
